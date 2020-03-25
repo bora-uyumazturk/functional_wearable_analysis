@@ -1,0 +1,55 @@
+---
+title: "regression_diagnostics"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+stationary_file = "y_and_static.csv"
+functional_file = "dft_imputed.csv"
+k = 24
+```
+
+```{r}
+functional = read.csv(functional_file, row.names=1)
+functional = functional[, colnames(functional)[1:k]]
+functional$ID = rownames(functional)
+head(functional)
+```
+
+## Merge by ID
+
+```{r}
+covariates = read.csv(stationary_file, row.names=1)
+colnames(covariates)[2:3] = c('y', 'steps')
+df = merge(covariates, functional, by="ID")
+head(df)
+```
+
+## Fit linear model on non-functional covariates
+```{r}
+library(ggplot2)
+static_model = lm(df$y ~ df$steps)
+summary(static_model)
+
+ggplot(data = df, aes(x=df$steps, y=df$y)) + geom_point() + geom_smooth(method="lm", se = FALSE) + ylab("resting HR") + xlab("steps/day")
+ggsave("~/Desktop/BIODS215/project/plots/hr_on_step.png")
+```
+
+```{r}
+plot(static_model)
+```
+## LARS
+```{r}
+library(selectiveInference)
+X = as.matrix(df[, colnames(df)[4:ncol(df)]])
+y = as.matrix(resid(static_model))
+l = lar(X, y, maxsteps=8)
+plot(l, xvar='norm', breaks=FALSE, var.labels=TRUE)
+
+#png("~/Desktop/BIODS215/project/paper_code/figure3/lars.png", width=7, height=5)
+dev.off()
+```
