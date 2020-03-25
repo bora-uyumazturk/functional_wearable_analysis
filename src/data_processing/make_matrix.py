@@ -37,8 +37,8 @@ def main():
     parser.add_argument("--csv_dir", type=str)
     parser.add_argument("--aggregator", type=str)
     parser.add_argument("--outpath", type=str)
-    parser.add_argument("--first", type=int)
-    parser.add_argument("--last", type=int)
+    parser.add_argument("--first", type=int, default=1)
+    parser.add_argument("--last", type=int, default=43)
     args = parser.parse_args()
 
     if not os.path.exists(args.csv_dir):

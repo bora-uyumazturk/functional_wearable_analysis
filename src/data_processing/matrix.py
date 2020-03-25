@@ -34,8 +34,12 @@ class Matrix_Creator:
                 out = out.merge(df_cur, how='outer',
                                 left_index=True, right_index=True)
 
+        out = out.T
+        if isinstance(out.columns, pd.MultiIndex):
+            out.columns = range(len(out.columns))
+
         if outpath is not None:
-            out.T.to_csv(outpath)
+            out.to_csv(outpath)
             print("Saved matrix to %s." %outpath)
 
-        return out
+        return out.T
