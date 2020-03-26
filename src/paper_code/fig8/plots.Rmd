@@ -5,15 +5,8 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-knitr::opts_knit$set(root.dir="~/Desktop/BIODS215/project/paper_code/figure2/")
 ```
 
-## Load in csv
-```{r}
-data = read.csv("day_hour.csv", row.names=1)
-data$num_components = as.numeric(row.names(data))
-head(data)
-```
 ```{r}
 library(reshape2)
 library(gridExtra)
@@ -21,59 +14,6 @@ library(grid)
 library(ggplot2)
 library(lattice)
 
-p1 = ggplot(data=data, aes(num_components, dft)) + geom_line() 
-p2 = ggplot(data = data, aes(num_components, nmf)) + geom_line()
-p3 = ggplot(data = data, aes(num_components, pca)) + geom_line()
-p4 = ggplot(data = data, aes(num_components, kmeans)) + geom_line()
-
-
-grid.arrange(p1, p2, p3, p4, nrow=4)
-```
-
-## Load in csv
-```{r}
-data = read.csv("week_hour.csv", row.names=1)
-data$num_components = as.numeric(row.names(data))
-head(data)
-
-p1 = ggplot(data=data, aes(num_components, dft)) + geom_line() + theme(axis.ticks.x = element_blank(), axis.text.x=element_blank(), axis.title.x=element_blank())
-p2 = ggplot(data = data, aes(num_components, nmf)) + geom_line() + theme(axis.ticks.x = element_blank(), axis.text.x=element_blank(), axis.title.x=element_blank())
-p3 = ggplot(data = data, aes(num_components, pca)) + geom_line() + theme(axis.ticks.x = element_blank(), axis.text.x=element_blank(), axis.title.x=element_blank())
-p4 = ggplot(data = data, aes(num_components, kmeans)) + geom_line() 
-
-
-grid.arrange(p1, p2, p3, p4, nrow=4)
-```
-
-
-```{r}
-data = read.csv("week_hour_dft.csv", row.names=1)
-
-head(data)
-```
-
-```{r}
-p1= ggplot(data=read.csv("week_hour_dft.csv", row.names=1), aes(num_components, value)) + geom_smooth(span=0.8) + theme(axis.ticks.x = element_blank(), axis.text.x=element_blank(), axis.title.x=element_blank()) + coord_cartesian(ylim=c(4, 9))
-p2 = ggplot(data=read.csv("week_hour_nmf.csv", row.names=1), aes(num_components, value)) + geom_smooth(span=0.8)  + coord_cartesian(ylim=c(4, 9)) + theme(axis.ticks.x = element_blank(), axis.text.x=element_blank(), axis.title.x=element_blank())
-p3 = ggplot(data=read.csv("week_hour_pca.csv", row.names=1), aes(num_components, value)) + geom_smooth(span=0.8)  + coord_cartesian(ylim=c(4, 9))
-p4 = ggplot(data=read.csv("week_hour_kmeans.csv", row.names=1), aes(num_components, value)) + geom_smooth(span=0.8) + coord_cartesian(ylim=c(4, 9))
-
-grid.arrange(p1, p2, p3, p4, nrow=2, ncol=2)
-```
-
-```{r}
-data_dft = read.csv("day_hour_dft.csv", row.names=1)
-
-data_nmf = read.csv("day_hour_nmf.csv", row.names = 1)
-
-data_kmeans = read.csv("day_hour_kmeans.csv", row.names = 1)
-
-data_pca = read.csv("day_hour_pca.csv", row.names = 1)
-
-ggplot() + geom_smooth(data=data_dft, aes(num_components, value, col='dft'), se=FALSE) + geom_smooth(data=data_nmf, aes(num_components, value, col='nmf'), se=FALSE) + geom_smooth(data=data_pca, aes(num_components, value, col='pca'), se=FALSE) + geom_smooth(data=data_kmeans, aes(num_components, value, col='kmeans'), se=FALSE)
-```
-
-```{r}
 data_dft = read.csv("week_hour_dft.csv", row.names=1)
 
 data_nmf = read.csv("week_hour_nmf.csv", row.names = 1)
@@ -101,5 +41,5 @@ g = arrangeGrob(g2)
 grid.arrange(g)
 grid.draw(g)
 
-#ggsave("leave_one_out.png", g)
+ggsave("leave_one_out.png", g)
 ```

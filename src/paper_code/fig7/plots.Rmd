@@ -5,7 +5,7 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-knitr::opts_knit$set(root.dir="~/Desktop/BIODS215/project/paper_code/table2/")
+#knitr::opts_knit$set(root.dir="~/Desktop/BIODS215/project/paper_code/table2/")
 ```
 
 ```{r}
@@ -20,6 +20,9 @@ colnames(residuals) = c('steps')
 library(ggplot2)
 library(reshape2)
 library(rcompanion)
+library(grid)
+library(gridExtra)
+library(lattice)
 data = read.csv("day_hour.csv", row.names=1)
 
 mae = abs(data - data$y)[, c('kmeans', 'nmf', 'pca', 'dft')]
