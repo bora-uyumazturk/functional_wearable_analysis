@@ -4,10 +4,8 @@ import os
 import pandas as pd
 import numpy as np
 
-from matrix import Matrix_Creator
 from make_matrix import average_hour_per_day, average_hour_per_week
 from matrix_factorizer import LinearFactorizationModel
-from sklearn.linear_model import LinearRegression
 
 def make_directory(dir):
     """Create dir if doesn't already exist"""
@@ -73,32 +71,6 @@ def remove_nans(X, y):
     return (df.drop(['y'], axis='columns').values, df.loc[:, 'y'].values.reshape((-1, 1)))
 
 
-def compute_results(k_range, static_data, timescale, methods, data_file):
-    print("in compute results: {}".format(timescale))
-    results_df = pd.DataFrame(index = k_range, columns = methods)
-    data = get_timescale_data(timescale, data_file)
-    print("got data")
-
-    X_static = static_data.drop(['y'], axis='columns').values
-    num_static = X_static.shape[1]
-    y = static_data.loc[:, 'y'].values.reshape((-1, 1))
-    X_ts = data.values
-
-    X = combine(X_static, X_ts)
-
-    X, y = remove_nans(X, y)
-
-    for method in methods:
-        for k in k_range:
-            print("getting method: {}".format(method))
-            model_fn = LinearFactorizationModel
-            model = model_fn(k, method, num_static)
-            results_df.loc[k, method] = np.mean(cross_validate(model, X, y)) 
-    
-
-    return results_df 
-
-
 def compute_results(k_range, static_data, timescale, method, data_file):
     print("in compute results: {}".format(timescale))
     results_df = pd.DataFrame(columns = ['num_components', 'value'])
@@ -122,10 +94,8 @@ def compute_results(k_range, static_data, timescale, method, data_file):
         df_k.loc[:, 'value'] = cross_validate(model, X, y).reshape((-1))
         df_k.loc[:, 'num_components'] = k
         results_df = pd.concat([results_df, df_k], axis=0, ignore_index=True)
-        #results_df.loc[:, k] = cross_validate(model, X, y).reshape((-1)) 
 
     return results_df 
-
 
 
 def main(out_dir, static_data, day_hour_file, week_hour_file):

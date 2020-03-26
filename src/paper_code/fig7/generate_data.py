@@ -4,14 +4,10 @@ import os
 import pandas as pd
 import numpy as np
 
-from matrix import Matrix_Creator
-from make_matrix import average_hour_per_day, average_hour_per_week
-from matrix_factorizer import LinearFactorizationModel
+from data_processing import average_hour_per_day, average_hour_per_week
+from models import LinearFactorizationModel
 
-def make_directory(dir):
-    """Create dir if doesn't already exist"""
-    if not os.path.exists(dir):
-        os.makedirs(dir)
+from utils import *
 
 
 def get_factorizer(method):
@@ -27,7 +23,6 @@ def get_timescale_data(timescale, filename):
         if timescale == 'day_hour':
             df = pd.read_csv(filename, index_col=0)
         elif timescale == 'week_hour':
-            #df = pd.read_csv(filename, index_col=0, header=[0, 1])
             df = pd.read_csv(filename, index_col=0)
 
     elif data_dir is not None:
@@ -40,19 +35,6 @@ def get_timescale_data(timescale, filename):
         csvs = [csv_template.format(str(i).zfil(3)) for i in range(1, 44)]
 
     return df
-
-
-def combine(X1, X2):
-    n1, m1 = X1.shape
-    n2, m2 = X2.shape
-    X_new = np.zeros((n1, m1+m2))
-    X_new[:, :m1] = X1
-    X_new[:, m1:] = X2
-    return X_new
-
-
-def indices_except(x, n):
-    return [i for i in range(n) if i != x]
 
 
 def cross_validate(model, X, y):
@@ -103,13 +85,6 @@ def nested_cross_validation(num_components_range, X, y, model_fn, method, num_st
     
     #return (preds - y)**2
     return preds
-
-
-def remove_nans(X, y):
-    df = pd.DataFrame(X)
-    df.loc[:, 'y'] = y
-    df = df.dropna(axis=0)
-    return (df.drop(['y'], axis='columns').values, df.loc[:, 'y'].values.reshape((-1, 1)))
 
 
 def compute_results(static_data, timescale, methods, data_file):
