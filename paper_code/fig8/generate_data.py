@@ -80,7 +80,6 @@ def main(out_dir, static_data, day_hour_file, week_hour_file):
     methods = ['dft', 'nmf', 'pca', 'kmeans']
     timescales = ['day_hour', 'week_hour']
     static_df = pd.read_csv(static_data, index_col=0)
-    k_range = range(13)
 
     for t, f in zip(timescales, [day_hour_file, week_hour_file]):
         if t == 'day_hour':
