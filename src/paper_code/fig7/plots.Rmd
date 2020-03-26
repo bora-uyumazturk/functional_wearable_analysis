@@ -9,33 +9,46 @@ knitr::opts_knit$set(root.dir="~/Desktop/BIODS215/project/paper_code/table2/")
 ```
 
 ```{r}
+covariates = read.csv("y_and_static.csv", row.names=1)
+head(covariates)
+fit = lm(data=covariates, y ~ Steps_day.AVG)
+residuals = data.frame(abs(resid(fit)))
+colnames(residuals) = c('steps')
+```
+
+```{r}
 library(ggplot2)
 library(reshape2)
 library(rcompanion)
 data = read.csv("day_hour.csv", row.names=1)
-head(data)
 
 mae = abs(data - data$y)[, c('kmeans', 'nmf', 'pca', 'dft')]
+head(mae)
+
+curr_covariates = covariates[row.names(mae), ]
+
+mae = merge(residuals, mae, by=0)
 
 melted = melt(mae)
-head(melted)
 
 sum = groupwiseMean(data=melted, var = 'value', group='variable')
+print(sum)
 
-p1 = ggplotGrob(ggplot(data=sum, aes(variable, Mean, col=variable)) + geom_point() + geom_errorbar(aes(ymin=Trad.lower, ymax=Trad.upper, width=0.25)) + ylab("mean absolute error") +theme(axis.title.x = element_blank(), legend.position='none')+ theme(axis.title.x = element_blank(), legend.title = element_blank()) + ggtitle("Performance (daily scale)") + coord_cartesian(ylim=c(3.5,9)))
+p1 = ggplotGrob(ggplot(data=sum, aes(variable, Mean, col=variable)) + geom_point() + geom_errorbar(aes(ymin=Trad.lower, ymax=Trad.upper, width=0.25)) + ylab("mean absolute error") +theme(axis.title.x = element_blank(), legend.position='none')+ theme(axis.title.x = element_blank(), legend.title = element_blank()) + ggtitle("Performance (daily scale)") + coord_cartesian(ylim=c(2.5,8.5)))
 
 
 data = read.csv("week_hour.csv", row.names=1)
-head(data)
 
 mae = abs(data - data$y)[, c('kmeans', 'nmf', 'pca', 'dft')]
 
+mae = merge(residuals, mae, by=0)
+
 melted = melt(mae)
-head(melted)
 
 sum = groupwiseMean(data=melted, var = 'value', group='variable')
+print(sum)
 
-p2 = ggplotGrob(ggplot(data=sum, aes(variable, Mean, col=variable)) + geom_point() + geom_errorbar(aes(ymin=Trad.lower, ymax=Trad.upper, width=0.25)) + ylab("mean absolute error") + ggtitle("Performance (weekly scale)") + theme(axis.title.y=element_blank(), axis.title.x=element_blank(), axis.ticks.y = element_blank(), axis.text.y = element_blank(), legend.title = element_blank()) + coord_cartesian(ylim=c(3.5,9)))
+p2 = ggplotGrob(ggplot(data=sum, aes(variable, Mean, col=variable)) + geom_point() + geom_errorbar(aes(ymin=Trad.lower, ymax=Trad.upper, width=0.25)) + ylab("mean absolute error") + ggtitle("Performance (weekly scale)") + theme(axis.title.y=element_blank(), axis.title.x=element_blank(), axis.ticks.y = element_blank(), axis.text.y = element_blank(), legend.title = element_blank()) + coord_cartesian(ylim=c(2.5,8.5)))
 
 g2= cbind(p1, p2, size='last')
 g = arrangeGrob(g2)
