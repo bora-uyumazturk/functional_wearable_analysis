@@ -5,10 +5,12 @@ from models import DFTFactorizer
 
 def main(source, dest):
     source_df = pd.read_csv(source, index_col=0)
+    source_df = source_df.dropna(axis='rows')
     X = source_df.values
-    factorizer = DFTFactorizer(num_components = X.shape[1])
+    factorizer = DFTFactorizer()
     out = factorizer.transform(X)
-    out_df = pd.DataFrame(X)
+    out_df = pd.DataFrame(out)
+    out_df.index = source_df.index
     out_df.to_csv(dest)
 
 if __name__ == '__main__':

@@ -53,7 +53,7 @@ class LinearFactorizationModel():
 
 class DFTFactorizer():
 
-    def __init__(self, num_components):
+    def __init__(self, num_components=None):
         self.num_components = num_components
 
     def fit(self, X):
@@ -64,6 +64,8 @@ class DFTFactorizer():
         X = X / np.std(X, axis=1).reshape((-1, 1))
         X_f = np.abs(np.fft.fft(X, axis=1))
         X_f = X_f[:, 1:m//2]
+        if self.num_components is None:
+            return X_f
         return X_f[:, :self.num_components]
 
 
