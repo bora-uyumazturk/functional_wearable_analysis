@@ -8,8 +8,8 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r}
-stationary_file = "y_and_static.csv"
-functional_file = "sample.csv"
+stationary_file = "../../data/y_and_static.csv"
+functional_file = "dft.csv"
 k = 24
 ```
 
@@ -24,7 +24,8 @@ head(functional)
 
 ```{r}
 covariates = read.csv(stationary_file, row.names=1)
-colnames(covariates)[2:3] = c('y', 'steps')
+colnames(covariates) = c('y', 'steps')
+covariates$ID = row.names(covariates)
 df = merge(covariates, functional, by="ID")
 df = df[complete.cases(df), ]
 head(df)
