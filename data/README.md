@@ -2,6 +2,8 @@
 
 ### y_and_static.csv
 
+Contains heart rate and average steps per day for each subject (referred to as `static_data` in `generate_data.py` files for figures).
+
 Columns:
   - `y`: average resting heart rate 
   - `Steps.day.AVG`: average steps per day 
