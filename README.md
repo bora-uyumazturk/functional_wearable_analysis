@@ -17,7 +17,7 @@ Once downloaded, to produce the aggregate activity data, follow these steps:
 
 To recreate figures used in the paper, run code in corresponding folder in `paper_code`. For each figure, follow these steps:
 
-1. Run `generate_data.py` to run analysis and produce data for plotting.
+1. Run `generate_data.py`. These use the aggregated weekly and daily accelerometer data as well as static data in `data` to to run analysis and produce data for plotting
 2. Run `plots.Rmd` (R Markdown) or `plots.ipynb` (jupyter notebook) (depending on the figure).
 
 Note: for fig1 and fig3, you must change `DATA_DIR` at the beginning of the notebook to location of data csv files with time features added (i.e. after running `add_time_features.py`).
