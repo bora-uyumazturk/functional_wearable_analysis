@@ -88,7 +88,7 @@ def main():
     """writes matrix of average hour activity"""
     parser = argparse.ArgumentParser()
     parser.add_argument("--csv_dir", type=str)
-    parser.add_argument("--aggregator", type=str)
+    parser.add_argument("--timescale", type=str)
     parser.add_argument("--outpath", type=str)
     parser.add_argument("--first", type=int, default=1)
     parser.add_argument("--last", type=int, default=43)
@@ -100,9 +100,9 @@ def main():
     
     csv_template = os.path.join(args.csv_dir, "Basis_{}.csv")
     csvs = [csv_template.format(str(i).zfill(3)) for i in range(args.first, args.last+1)]
-    if args.aggregator == "day_hour":
+    if args.timescale == "day_hour":
         f = average_hour_per_day
-    elif args.aggregator == "week_hour":
+    elif args.timescale == "week_hour":
         f = average_hour_per_week
     else:
         raise(Exception("invalid aggregator"))

@@ -98,14 +98,18 @@ def compute_results(static_data, timescale, methods, data_file):
     y = static_data.loc[:, 'y'].values.reshape((-1, 1))
     X_ts = data.values
 
+    X_static = X_static[:X_ts.shape[0], :]
+    y = y[:X_ts.shape[0], :]
     X = combine(X_static, X_ts)
 
     X, y = remove_nans(X, y)
 
     if timescale == 'week_hour':
         num_components_range = range(1, 25)
+        num_components_range = range(1, 10)
     else:
         num_components_range = range(1, 12)
+        num_components_range = range(1, 10)
 
     for method in methods:
         print("getting method: {}".format(method))

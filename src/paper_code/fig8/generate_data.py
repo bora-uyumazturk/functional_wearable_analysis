@@ -4,13 +4,10 @@ import os
 import pandas as pd
 import numpy as np
 
-from make_matrix import average_hour_per_day, average_hour_per_week
-from matrix_factorizer import LinearFactorizationModel
+from data_processing import average_hour_per_day, average_hour_per_week
+from models import LinearFactorizationModel
 
-def make_directory(dir):
-    """Create dir if doesn't already exist"""
-    if not os.path.exists(dir):
-        os.makedirs(dir)
+from utils import *
 
 
 def get_factorizer(method):
@@ -40,19 +37,6 @@ def get_timescale_data(timescale, filename):
     return df
 
 
-def combine(X1, X2):
-    n1, m1 = X1.shape
-    n2, m2 = X2.shape
-    X_new = np.zeros((n1, m1+m2))
-    X_new[:, :m1] = X1
-    X_new[:, m1:] = X2
-    return X_new
-
-
-def indices_except(x, n):
-    return [i for i in range(n) if i != x]
-
-
 def cross_validate(model, X, y):
     preds = np.zeros(y.shape)
     n = X.shape[0]
@@ -62,13 +46,6 @@ def cross_validate(model, X, y):
         model.fit(X_i, y_i)
         preds[i, 0] = model.predict(X[i, :].reshape((1, -1)))
     return np.abs(preds - y)
-
-
-def remove_nans(X, y):
-    df = pd.DataFrame(X)
-    df.loc[:, 'y'] = y
-    df = df.dropna(axis=0)
-    return (df.drop(['y'], axis='columns').values, df.loc[:, 'y'].values.reshape((-1, 1)))
 
 
 def compute_results(k_range, static_data, timescale, method, data_file):
