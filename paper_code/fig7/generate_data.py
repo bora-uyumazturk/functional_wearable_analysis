@@ -49,12 +49,10 @@ def cross_validate(model, X, y):
 
 
 def get_cv_param(num_components_range, X, y, model_fn, method, num_static):
-    print("in inner cross validation")
     best_k = 1
     best_mse = None
     
     for k in num_components_range:
-        print("hyperparam: {}".format(k))
         model = model_fn(k, method, num_static)
         scores = cross_validate(model, X, y)
         mse = np.mean(scores)
