@@ -13,7 +13,9 @@ wd <- read.csv(here('data', 'week_hour.csv'), row.names=1)
 ```{r boxplot}
 library(ggplot2)
 colnames(df) = 1:24
-ggplot(stack(df), aes(x = factor(ind, levels = names(df)), y = values)) + geom_boxplot(outlier.shape = NA) + xlab('hour') + ylab('accel_magnitude') + ggtitle('Activity per hour, per day') + ylim(0, 2500) +  theme_minimal() 
+ggplot(stack(df), aes(x = factor(ind, levels = names(df)), y = values)) + geom_boxplot(outlier.shape = NA) + xlab('hour') + ylab('accel_magnitude') + ggtitle('Activity per hour, per day') + ylim(0, 2500) +  theme_minimal()
+
+ggsave('day_hour_summary.png')
 ```
 
 ### (b)
@@ -23,4 +25,6 @@ wdmed = apply(wd, 2, FUN = median, na.rm=TRUE)
 medframe = data.frame(wdmed)
 
 ggplot(medframe, aes(x=1:168, y=medframe$wdmed)) + geom_line(color='blue') + xlab("hour in week") + ylab("accel_magnitude") + ggtitle('Median hourly activity per week') + theme_minimal()
+
+ggsave("week_hour_summary.png")
 ```
