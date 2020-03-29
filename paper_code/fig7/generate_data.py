@@ -103,8 +103,10 @@ def compute_results(static_data, timescale, methods, data_file):
     X, y = remove_nans(X, y)
 
     if timescale == 'week_hour':
+        # TODO: fix hardcoded ranges
         num_components_range = range(1, 25)
     else:
+        # TODO: fix hardcoded ranges
         num_components_range = range(1, 12)
 
     for method in methods:
