@@ -1,3 +1,4 @@
+"""Add time features to collection of csvs holding wearable activity data."""
 from datetime import datetime
 import concurrent.futures
 import argparse
@@ -6,10 +7,12 @@ import numpy as np
 import pandas as pd
 
 def get_date_information(date_str):
+    """Extract data information from datetime string."""
     date = datetime.strptime(date_str, '%Y-%m-%d %H:%M:%S%z')
     return ((date.month % 12)//3, date.month, date.weekday(), date.hour)
 
 def add_datetime_info(sid, base, out):
+    """Add datetime information to subject data and save."""
     print("Processing subject {}".format(sid))
     df = pd.read_csv(base.format(sid))
     print("read csv")
@@ -44,6 +47,7 @@ def add_datetime_info(sid, base, out):
 
 
 def process_dataframes(sids, base, out, func):
+    """Add datetime information to subject data in parallel."""
     pool = concurrent.futures.ThreadPoolExecutor(4)
     future_list = []
     for sid in sids:
