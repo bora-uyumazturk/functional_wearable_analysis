@@ -1,0 +1,24 @@
+---
+title: "plots"
+output: html_document
+---
+```{r datainput}
+library(here)
+here()
+dd <- read.csv(here('fig4', 'dft_day.csv'), row.names=1)
+wd <- read.csv(here('fig4', 'dft_week.csv'), row.names=1)
+```
+
+```{r boxplot}
+library(ggplot2)
+ggplot(stack(dd), aes(x = factor(ind, levels = names(dd)), y = values)) + geom_boxplot(outlier.color = 'blue') + geom_boxplot(outlier.shape = NA) + xlab('component') + ylab('coefficient value') + ggtitle('Coefficient statistics for DFT (daily scale)') + theme_minimal()+
+  theme(axis.text.x=element_blank())
+
+ggsave('dft_daily_coefficient_boxplot.png')
+```
+
+```{r boxplot}
+ggplot(stack(wd), aes(x = factor(ind, levels = names(wd)), y = values)) + geom_boxplot(outlier.color = 'blue') + geom_boxplot(outlier.shape = NA) + xlab('component') + ylab('coefficient value') + ggtitle('Coefficient statistics for DFT (weekly scale)') + theme_minimal()+
+  theme(axis.text.x=element_blank())
+ggsave('dft_weekly_coefficient_boxplot.png')
+```
