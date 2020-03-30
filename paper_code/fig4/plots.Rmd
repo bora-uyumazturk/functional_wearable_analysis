@@ -2,11 +2,9 @@
 title: "plots"
 output: html_document
 ---
-```{r datainput}
-library(here)
-here()
-dd <- read.csv(here('fig4', 'dft_day.csv'), row.names=1)
-wd <- read.csv(here('fig4', 'dft_week.csv'), row.names=1)
+```{r setup, include=FALSE}
+dd <- read.csv('dft_day.csv', row.names=1)
+wd <- read.csv('dft_week.csv', row.names=1)
 ```
 
 ```{r boxplot}
