@@ -1,0 +1,21 @@
+---
+title: "plots"
+output: html_document
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+pca_eigs <- read.csv('~/code/biods215_project/week_hour/pca_timesrs_components.csv', row.names=1)
+nmf_comp <- read.csv('~/code/biods215_project/week_hour/nmf_components.csv', row.names=1)
+```
+
+## PCA, components
+```{r nmf_components}
+ggplot() + geom_line(aes(y=pca_eigs$PC1, x=1:168, color='PC1')) + geom_line(aes(y=pca_eigs$PC2, x=1:168, color='PC2')) + geom_line(aes(y=pca_eigs$PC3, x=1:168, color='PC3'))  + scale_colour_brewer(palette='Greens') + ggtitle('PCA components (1 to 3)') + xlab('hour') + ylab('') + theme_minimal()
+ggsave('pca_components.png')
+```
+
+## NMF, components
+```{r nmf_components}
+ggplot() + geom_line(aes(y=nmf_comp$X0, x=1:168, color='X0')) + geom_line(aes(y=nmf_comp$X1, x=1:168, color='X1')) + geom_line(aes(y=nmf_comp$X2, x=1:168, color='X2'))  + scale_colour_brewer(palette='Greens') + ggtitle('NMF components (X0 to X2)') + xlab('hour') + ylab('') + theme_minimal()
+ggsave('nmf_components.png')
+```
